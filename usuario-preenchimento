@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<!-- Declaração do tipo de documento HTML5 -->
+<html lang="pt-BR">
+<!-- Elemento raiz do documento com idioma português brasileiro -->
+
+<head>
+  <!-- Cabeçalho do documento com metadados -->
+  <meta charset="UTF-8">
+  <!-- Define a codificação de caracteres como UTF-8 para suportar acentos -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Configura viewport para responsividade em dispositivos móveis -->
+  <title>Sistema de Autenticação - 5 Páginas</title>
+  <!-- Título da página que aparece na aba do navegador -->
+  <style>
+    /* Início da seção de estilos CSS */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Reset CSS: remove margens/paddings padrão, define box-sizing e fonte */
+    body {
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+
+    /* Estilo do corpo: cor de fundo cinza claro e texto azul escuro */
+
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      padding: 40px;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    /* Container principal: largura máxima, centralizado, com padding e bordas arredondadas */
+
+    h2 {
+      margin-bottom: 25px;
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: #2c3e50;
+    }
+
+    /* Estilo para títulos h2 */
+    h3 {
+      margin-bottom: 12px;
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: #34495e;
+    }
+
+    /* Estilo para títulos h3 */
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #34495e;
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+    }
+
+    /* Estilo para labels: em bloco, com peso de fonte e cor específicos */
+
+    input,
+    select {
+      /* Estilo comum para inputs e selects */
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #d1d3d6;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      background: #fff;
+      color: #2c3e50;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    /* Estilo para foco nos campos: remove outline e muda cor da borda */
+
+    button {
+      /* Estilo base para todos os botões */
+      padding: 12px 26px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      margin-right: 8px;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    /* Efeito hover: levanta o botão 1px */
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    /* Efeito active: retorna à posição original */
+
+    /* Classes de cor para diferentes tipos de botões */
+    .btn-avancar {
+      background: #3498db;
+      color: white;
+    }
+
+    .btn-voltar {
+      background: #7f8c8d;
+      color: white;
+    }
+
+    .btn-inicio {
+      background: #1494e9;
+      color: white;
+    }
+
+    .btn-imprimir {
+      background: #2c3e50;
+      color: white;
+    }
+
+    .btn-confirmar {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-verificar {
+      background: #2980b9;
+      color: white;
+    }
+
+    button:disabled {
+      background: #bdc3c7 !important;
+      cursor: not-allowed;
+    }
+
+    /* Estilo para botões desabilitados: cor cinza e cursor não permitido */
+
+    .hidden {
+      display: none;
+    }
+
+    /* Classe utilitária para esconder elementos */
+
+    .option-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Container para lista de opções usando flexbox em coluna */
+    .option-item {
+      /* Item individual da lista de opções */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid #e0e0e0;
+      transition: background 0.2s;
+    }
+
+    .option-item:nth-child(odd) {
+      background: #fbfcfd;
+    }
+
+    /* Zebra: cor de fundo alternada para linhas ímpares */
+    .option-item label {
+      margin-right: 12px;
+      width: 120px;
+    }
+
+    /* Label dentro do item com largura fixa */
+    .option-item select {
+      /* Select personalizado dentro dos itens */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      /* Remove aparência nativa do select */
+      background: #fff url('data:image/svg+xml;utf8,<svg fill="%233498db" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 12px center;
+      /* Adiciona seta personalizada como background */
+      background-size: 16px;
+      padding-right: 40px;
+      border-radius: 10px;
+      border: 1px solid #d1d3d6;
+      transition: all 0.2s ease;
+      width: 200px;
+    }
+
+    .option-item select:hover {
+      border-color: #3498db;
+    }
+
+    /* Efeito hover no select */
+    .option-item select:focus {
+      outline: none;
+      border-color: #2980b9;
+      box-shadow: 0 0 6px rgba(52, 152, 219, 0.2);
+    }
+
+    /* Efeito focus com shadow */
+
+    .final-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Container final com layout em coluna e gap */
+    .final-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #d1d3d6;
+    }
+
+    /* Caixa individual no container final */
+    pre {
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      color: #2c3e50;
+    }
+
+    /* Estilo para texto pré-formatado (monoespaçado) */
+
+    .toast {
+      /* Notificação toast (popup) */
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #000000cc;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      transform: translateY(15px);
+      font-weight: 500;
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Classe para mostrar o toast */
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: -15px;
+      margin-bottom: 15px;
+    }
+
+    /* Mensagens de erro em vermelho */
+    .success-message {
+      color: #27ae60;
+      font-size: 0.9rem;
+      margin-top: -15px;
+      margin-bottom: 15px;
+    }
+
+    /* Mensagens de sucesso em verde */
+
+    .campo-bloqueado {
+      /* Campos que não podem ser editados */
+      background-color: #f8f9fa;
+      border: 1px solid #d1d3d6;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .info-campo {
+      /* Texto informativo abaixo dos campos */
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+
+    .campo-opcional {
+      /* Indicação de campo opcional */
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: -10px;
+      margin-bottom: 15px;
+    }
+
+    .navegacao-sistemas {
+      /* Navegação entre sistemas */
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-sistema {
+      /* Botões de navegação do sistema */
+      padding: 15px 30px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-sistema:hover {
+      /* Efeito hover nos botões do sistema */
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .btn-sistema.ativo {
+      /* Botão do sistema ativo */
+      background: #2c3e50;
+    }
+
+    /* Estilos para os selects de graduação e especialidade */
+    .graduacao-especialidade-container {
+      /* Container para os dois selects lado a lado */
+      display: flex;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .graduacao-especialidade-container>div {
+      /* Divisões dentro do container */
+      flex: 1;
+    }
+
+    .graduacao-especialidade-container label {
+      /* Labels dentro do container */
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      color: #34495e;
+      font-weight: 500;
+    }
+
+    .select-group {
+      /* Grupo de select com label */
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+  <!-- Fim da seção de estilos -->
+</head>
+<!-- Fim do cabeçalho -->
+
+<body>
+  <!-- Início do corpo do documento -->
+
+  <!-- Navegação entre sistemas (comentada) -->
+  <!--<div class="navegacao-sistemas">
+  <button class="btn-sistema" onclick="window.open('lista_pessoal.html', '_blank')">Abrir Sistema Gerador de Código</button>
+  <button class="btn-sistema ativo">Sistema de Autenticação</button>
+</div>-->
+
+  <!-- Página 1: Verificação do Código -->
+  <div class="container" id="page1">
+    <!-- Primeira página - container principal -->
+    <h2>Verificação de Autenticidade</h2>
+    <!-- Título da página -->
+    <p>Digite seu código único para verificação:</p>
+    <!-- Instrução para o usuário -->
+    <input type="text" id="codigoVerificacao" placeholder="Ex: a1b2c3d4e5">
+    <!-- Campo de entrada para o código -->
+    <button class="btn-verificar" id="verificarCodigo">Verificar Código</button>
+    <!-- Botão para verificar o código -->
+    <p id="mensagemVerificacao" style="margin-top:15px;font-weight:500;"></p>
+    <!-- Parágrafo para mostrar mensagens de verificação -->
+  </div>
+  <!-- Fim da página 1 -->
+
+  <!-- Página 2: Dados Pessoais -->
+  <div class="container hidden" id="page2">
+    <!-- Segunda página - inicialmente escondida -->
+    <h2>Dados Pessoais</h2>
+    <!-- Título da página -->
+
+    <label for="nomeCompleto">Nome completo *</label>
+    <!-- Label para campo nome -->
+    <input type="text" id="nomeCompleto" placeholder="Ex: JOÃO DA SILVA" readonly class="campo-bloqueado">
+    <!-- Campo de nome (somente leitura) -->
+    <div class="info-campo">Nome definido automaticamente pelo código de verificação</div>
+    <!-- Informação sobre o campo -->
+
+    <label for="nip">NIP *</label>
+    <!-- Label para campo NIP -->
+    <input type="text" id="nip" maxlength="8" placeholder="12345678" readonly class="campo-bloqueado">
+    <!-- Campo NIP (somente leitura, máximo 8 caracteres) -->
+    <div class="info-campo">NIP definido automaticamente pelo código de verificação</div>
+    <!-- Informação sobre o campo -->
+
+    <label for="email">Email</label>
+    <!-- Label para campo email -->
+    <input type="email" id="emailAuth" placeholder="exemplo@email.com (opcional)">
+    <!-- Campo email (opcional) -->
+    <div class="campo-opcional">Campo opcional</div>
+    <!-- Indicação de campo opcional -->
+
+    <label for="numeroInterno">Número Interno *</label>
+    <!-- Label para número interno -->
+    <input type="text" id="numeroInternoAuth" placeholder="ACI1-101">
+    <!-- Campo número interno -->
+    <div id="erroNumeroInterno" class="error-message hidden">Número interno é obrigatório</div>
+    <!-- Mensagem de erro (inicialmente escondida) -->
+
+    <label for="graduacaoEspecialidade">Graduação e Especialidade *</label>
+    <!-- Label para graduação e especialidade -->
+
+    <div class="graduacao-especialidade-container">
+      <!-- Container para os dois selects -->
+      <div class="select-group">
+        <!-- Grupo do select de graduação -->
+        <label for="graduacao">Graduação</label>
+        <!-- Label para graduação -->
+        <select id="graduacao">
+          <!-- Select de graduação -->
+          <option value="">-- Selecione --</option>
+          <!-- Opção padrão -->
+          <option value="AL">AL</option>
+          <!-- Opções de graduação -->
+          <option value="MN">MN</option>
+          <option value="SD">SD</option>
+          <option value="CB">CB</option>
+          <option value="3SG">3SG</option>
+          <option value="2SG">2SG</option>
+          <option value="1SG">1SG</option>
+          <option value="SO">SO</option>
+        </select>
+      </div>
+
+      <div class="select-group">
+        <!-- Grupo do select de especialidade -->
+        <label for="especialidade">Especialidade</label>
+        <!-- Label para especialidade -->
+        <select id="especialidade">
+          <!-- Select de especialidade -->
+          <option value="">-- Selecione --</option>
+          <!-- Opção padrão -->
+          <!-- Lista completa de especialidades -->
+          <option value="AM">AM</option>
+          <option value="AR">AR</option>
+          <option value="AT">AT</option>
+          <option value="AV">AV</option>
+          <option value="BA">BA</option>
+          <option value="CA">CA</option>
+          <option value="CE">CE</option>
+          <option value="CI">CI</option>
+          <option value="CN">CN</option>
+          <option value="CO">CO</option>
+          <option value="CP">CP</option>
+          <option value="CT">CT</option>
+          <option value="DT">DT</option>
+          <option value="EF">EF</option>
+          <option value="EG">EG</option>
+          <option value="EL">EL</option>
+          <option value="EP">EP</option>
+          <option value="ES">ES</option>
+          <option value="ET">ET</option>
+          <option value="FR">FR</option>
+          <option value="HN">HN</option>
+          <option value="IF">IF</option>
+          <option value="MA">MA</option>
+          <option value="MC">MC</option>
+          <option value="MG">MG</option>
+          <option value="MO">MO</option>
+          <option value="MP">MP</option>
+          <option value="MR">MR</option>
+          <option value="MT">MT</option>
+          <option value="MU">MU</option>
+          <option value="OI">OI</option>
+          <option value="OR">OR</option>
+          <option value="OS">OS</option>
+          <option value="PL">PL</option>
+          <option value="SI">SI</option>
+          <option value="SQ">SQ</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="erroGraduacao" class="error-message hidden">Graduação e especialidade são obrigatórias</div>
+    <!-- Mensagem de erro para graduação/especialidade -->
+
+    <div style="margin-top:20px;">
+      <!-- Container dos botões de navegação -->
+      <button class="btn-voltar" id="voltarPagina2">Voltar</button>
+      <!-- Botão voltar -->
+      <button class="btn-avancar" id="avancarPagina2">Avançar</button>
+      <!-- Botão avançar -->
+    </div>
+  </div>
+  <!-- Fim da página 2 -->
+
+  <!-- Página 3: Seleção de OMs -->
+  <div class="container hidden" id="page3">
+    <!-- Terceira página - seleção de OMs -->
+    <h2>Seleção de OMs</h2>
+    <!-- Título da página -->
+    <div class="option-list" id="optionsList"></div>
+    <!-- Container onde a lista de selects será gerada dinamicamente -->
+    <div style="margin-top:20px;">
+      <!-- Container dos botões de navegação -->
+      <button class="btn-voltar" id="voltarPagina3">Voltar</button>
+      <!-- Botão voltar -->
+      <button class="btn-avancar" id="avancarPagina3" disabled>Avançar</button>
+      <!-- Botão avançar (inicialmente desabilitado) -->
+    </div>
+  </div>
+  <!-- Fim da página 3 -->
+
+  <!-- Página 4: Revisão -->
+  <div class="container hidden" id="page4">
+    <!-- Quarta página - revisão dos dados -->
+    <h2>Revisão</h2>
+    <!-- Título da página -->
+    <div class="final-container">
+      <!-- Container dos dados de revisão -->
+      <div class="final-box">
+        <!-- Caixa de dados pessoais -->
+        <h3>Dados Pessoais</h3>
+        <!-- Subtítulo -->
+        <pre id="reviewDados"></pre>
+        <!-- Área para mostrar dados pessoais (pré-formatado) -->
+      </div>
+      <div class="final-box">
+        <!-- Caixa de escolhas de OMs -->
+        <h3>Escolhas de OMs</h3>
+        <!-- Subtítulo -->
+        <pre id="reviewEscolhas"></pre>
+        <!-- Área para mostrar escolhas de OMs -->
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <!-- Container dos botões de navegação -->
+      <button class="btn-voltar" id="voltarPagina4">Voltar</button>
+      <!-- Botão voltar -->
+      <button class="btn-confirmar" id="concluir">Concluir</button>
+      <!-- Botão para concluir o processo -->
+    </div>
+  </div>
+  <!-- Fim da página 4 -->
+
+  <!-- Página 5: Conclusão -->
+  <div class="container hidden" id="page5">
+    <!-- Quinta página - conclusão -->
+    <h2>Conclusão</h2>
+    <!-- Título da página -->
+    <p style="margin-bottom:20px;">Seu formulário foi enviado com sucesso!</p>
+    <!-- Mensagem de sucesso -->
+
+    <div class="final-container">
+      <!-- Container dos dados finais -->
+      <div class="final-box">
+        <!-- Caixa de dados pessoais finais -->
+        <h3>Dados Pessoais</h3>
+        <!-- Subtítulo -->
+        <pre id="finalDados"></pre>
+        <!-- Área para mostrar dados pessoais finais -->
+      </div>
+      <div class="final-box">
+        <!-- Caixa de escolhas de OMs finais -->
+        <h3>Escolhas de OMs</h3>
+        <!-- Subtítulo -->
+        <pre id="finalEscolhas"></pre>
+        <!-- Área para mostrar escolhas de OMs finais -->
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <!-- Container dos botões finais -->
+      <button class="btn-inicio" id="inicio">Início</button>
+      <!-- Botão para voltar ao início -->
+      <button class="btn-imprimir" id="imprimir">Imprimir / Salvar PDF</button>
+      <!-- Botão para imprimir/salvar -->
+    </div>
+  </div>
+  <!-- Fim da página 5 -->
+
+  <div class="toast" id="toast">Arquivo gerado com sucesso!</div>
+  <!-- Elemento toast para notificações -->
+
+  <script>
+    // Início da seção JavaScript
+    // Dados globais
+    let listaCodigos = [];
+    // Array para armazenar lista de códigos carregados
+    let dadosFormulario = {};
+    // Objeto para armazenar dados do formulário
+    let escolhasOMs = Array(33).fill('');
+    // Array para armazenar 33 escolhas de OMs (inicialmente vazias)
+
+    // Nome do arquivo JSON único
+    const NOME_ARQUIVO_JSON = "formularios_completos.json";
+    // Constante com nome do arquivo JSON
+
+    // Listas de graduações e especialidades (em ordem alfabética)
+    const GRADUACOES = ["AL", "MN", "SD", "CB", "3SG", "2SG", "1SG", "SO"];
+    // Array com todas as graduações disponíveis
+    const ESPECIALIDADES = [
+      // Array com todas as especialidades disponíveis
+      "AM", "AR", "AT", "AV", "BA", "CA", "CE", "CI",
+      "CN", "CO", "CP", "CT", "DT", "EF", "EG", "EL",
+      "EP", "ES", "ET", "FR", "HN", "IF", "MA", "MC",
+      "MG", "MO", "MP", "MR", "MT", "MU", "OI", "OR",
+      "OS", "PL", "SI", "SQ"
+    ];
+
+    // Carregar OMs do localStorage
+    function carregarOMs() {
+      // Função para carregar lista de OMs do localStorage
+      const omsSalvas = localStorage.getItem("listaOMs");
+      // Tenta obter OMs do localStorage
+      if (omsSalvas) {
+        // Se encontrou OMs salvas
+        return JSON.parse(omsSalvas);
+        // Retorna a lista parseada
+      } else {
+        // Se não encontrou OMs salvas
+        // Lista padrão ATUALIZADA caso não haja OMs salvas
+        return [
+          "CADIM",
+          "COM 1 DN",
+          "COM 1 DN Espírito Santo",
+          "COM 1 DN fora de sede rj",
+          "COM 1 DN minas gerais",
+          "COM 2 DN",
+          "COM 3 DN",
+          "COM 4 DN",
+          "COM 5 DN",
+          "COM 6 DN",
+          "COM 7 DN",
+          "COM 8 DN",
+          "COM 9 DN",
+          "Comemch",
+          "comFFE",
+          "CPesFN",
+          "DAbM",
+          "DADM",
+          "DENSM",
+          "DEnsM/CN",
+          "DFM",
+          "DFM/SGM",
+          "DHN",
+          "DIM",
+          "DPC",
+          "DPM",
+          "DPM/ SP",
+          "DPM/DF",
+          "DPM/IEAPM",
+          "DSAM",
+          "DSM",
+          "DSM/SNNF",
+          "Itaguaí"
+        ];
+        // Retorna lista padrão de OMs
+      }
+    }
+
+    // Carrega o JSON automaticamente - FORMATO COMPATÍVEL COM O SISTEMA DA TABELA
+    function carregarListaCodigos() {
+      // Função para carregar lista de códigos do localStorage
+      try {
+        // Bloco try para capturar erros
+        const listaSalva = localStorage.getItem("listaPessoal");
+        // Obtém lista do localStorage
+        if (listaSalva) {
+          // Se encontrou lista salva
+          listaCodigos = JSON.parse(listaSalva);
+          // Parseia e armazena na variável global
+          console.log("✅ Lista de códigos carregada do localStorage:", listaCodigos.length, "registros");
+          // Log de sucesso
+        } else {
+          // Se não encontrou lista
+          console.log("ℹ️ Nenhuma lista de códigos encontrada no localStorage");
+          // Log informativo
+        }
+      } catch (error) {
+        // Captura erros
+        console.error("❌ Erro ao carregar lista do localStorage:", error);
+        // Log de erro
+        document.getElementById("mensagemVerificacao").textContent = "Erro ao carregar lista de autenticação.";
+        // Mostra mensagem de erro para o usuário
+        document.getElementById("mensagemVerificacao").style.color = "red";
+        // Muda cor para vermelho
+      }
+    }
+
+    // ========== PÁGINA 1: VERIFICAÇÃO DO CÓDIGO ==========
+    // Seção da página 1
+    document.getElementById("verificarCodigo").addEventListener("click", () => {
+      // Adiciona evento de clique no botão verificar
+      carregarListaCodigos(); // Recarrega a lista sempre que verificar
+
+      const codigo = document.getElementById("codigoVerificacao").value.trim().toUpperCase();
+      // Obtém e formata o código digitado
+      const msg = document.getElementById("mensagemVerificacao");
+      // Obtém elemento de mensagem
+
+      const achado = listaCodigos.find(p => p.codigo.toUpperCase() === codigo);
+      // Busca código na lista
+      if (achado) {
+        // Se encontrou o código
+        msg.textContent = `✅ Bem-vindo, ${achado.nome}! Acesso liberado.`;
+        // Mensagem de boas-vindas
+        msg.style.color = "green";
+        // Cor verde para sucesso
+
+        // Armazena dados do usuário autenticado
+        dadosFormulario = {
+          codigo: codigo,
+          nome: achado.nome,
+          nip: achado.nip || '',
+          numeroInterno: achado.numeroInterno || ''
+        };
+        // Preenche objeto com dados do usuário
+
+        // Avança para a página 2
+        document.getElementById("page1").classList.add("hidden");
+        // Esconde página 1
+        document.getElementById("page2").classList.remove("hidden");
+        // Mostra página 2
+
+        // Preenche campos automaticamente
+        if (achado.nome) document.getElementById("nomeCompleto").value = achado.nome;
+        // Preenche nome se existir
+        if (achado.nip) document.getElementById("nip").value = achado.nip;
+        // Preenche NIP se existir
+        if (achado.numeroInterno) document.getElementById("numeroInternoAuth").value = achado.numeroInterno;
+        // Preenche número interno se existir
+
+        // Tenta preencher graduação e especialidade se existirem nos dados
+        if (achado.graduacaoEspecialidade) {
+          // Se existir graduação/especialidade nos dados
+          const partes = achado.graduacaoEspecialidade.split(' ');
+          // Divide a string
+          if (partes.length >= 2) {
+            // Se tem pelo menos duas partes
+            document.getElementById("graduacao").value = partes[0];
+            // Preenche graduação
+            document.getElementById("especialidade").value = partes[1];
+            // Preenche especialidade
+          }
+        }
+      } else {
+        // Se não encontrou o código
+        msg.textContent = "❌ Código inválido ou não encontrado.";
+        // Mensagem de erro
+        msg.style.color = "red";
+        // Cor vermelha para erro
+      }
+    });
+
+    // ========== PÁGINA 2: DADOS PESSOAIS ==========
+    // Seção da página 2
+    document.getElementById("avancarPagina2").addEventListener("click", () => {
+      // Evento de clique no botão avançar da página 2
+      const nomeCompleto = document.getElementById("nomeCompleto").value.trim();
+      // Obtém nome completo
+      const nip = document.getElementById("nip").value.trim();
+      // Obtém NIP
+      const email = document.getElementById("emailAuth").value.trim();
+      // Obtém email
+      const numeroInterno = document.getElementById("numeroInternoAuth").value.trim();
+      // Obtém número interno
+      const graduacao = document.getElementById("graduacao").value;
+      // Obtém graduação
+      const especialidade = document.getElementById("especialidade").value;
+      // Obtém especialidade
+
+      let valido = true;
+      // Flag de validação
+
+      // Validações (nome e nip já estão preenchidos e bloqueados)
+      if (!nomeCompleto) {
+        // Se nome está vazio
+        valido = false;
+        // Marca como inválido
+      }
+
+      if (!/^\d{8}$/.test(nip)) {
+        // Valida NIP (exatamente 8 dígitos)
+        valido = false;
+        // Marca como inválido
+      }
+
+      // Email é opcional, não precisa de validação
+
+      if (!numeroInterno) {
+        // Se número interno está vazio
+        document.getElementById("erroNumeroInterno").classList.remove("hidden");
+        // Mostra erro
+        valido = false;
+        // Marca como inválido
+      } else {
+        // Se número interno preenchido
+        document.getElementById("erroNumeroInterno").classList.add("hidden");
+        // Esconde erro
+      }
+
+      // Valida graduação e especialidade
+      if (!graduacao || !especialidade) {
+        // Se graduação ou especialidade não selecionadas
+        document.getElementById("erroGraduacao").classList.remove("hidden");
+        // Mostra erro
+        valido = false;
+        // Marca como inválido
+      } else {
+        // Se ambas selecionadas
+        document.getElementById("erroGraduacao").classList.add("hidden");
+        // Esconde erro
+      }
+
+      if (valido) {
+        // Se todos os campos são válidos
+        // Combina graduação e especialidade
+        const graduacaoEspecialidade = `${graduacao} ${especialidade}`;
+        // Cria string combinada
+
+        // Armazena os dados
+        dadosFormulario = {
+          ...dadosFormulario,
+          // Spread operator para manter dados existentes
+          nomeCompleto: nomeCompleto.toUpperCase(),
+          // Nome em maiúsculas
+          nip: nip,
+          email: email || '', // Email pode ser vazio
+          numeroInterno: numeroInterno.toUpperCase(),
+          // Número interno em maiúsculas
+          graduacao: graduacao,
+          especialidade: especialidade,
+          graduacaoEspecialidade: graduacaoEspecialidade
+        };
+
+        // Avança para a página 3
+        document.getElementById("page2").classList.add("hidden");
+        // Esconde página 2
+        document.getElementById("page3").classList.remove("hidden");
+        // Mostra página 3
+        gerarSelectsOMs();
+        // Gera os selects de OMs
+      }
+    });
+
+    document.getElementById("voltarPagina2").addEventListener("click", () => {
+      // Evento de clique no botão voltar da página 2
+      document.getElementById("page2").classList.add("hidden");
+      // Esconde página 2
+      document.getElementById("page1").classList.remove("hidden");
+      // Mostra página 1
+    });
+
+    // Validação em tempo real para campos editáveis
+    document.getElementById("numeroInternoAuth").addEventListener("input", function () {
+      // Evento de input no campo número interno
+      this.value = this.value.toUpperCase();
+      // Converte para maiúsculas em tempo real
+      // Remove mensagem de erro enquanto digita
+      document.getElementById("erroNumeroInterno").classList.add("hidden");
+      // Esconde mensagem de erro
+    });
+
+    // Remove mensagem de erro quando selecionar graduação ou especialidade
+    document.getElementById("graduacao").addEventListener("change", function () {
+      // Evento de change no select de graduação
+      document.getElementById("erroGraduacao").classList.add("hidden");
+      // Esconde mensagem de erro
+    });
+
+    document.getElementById("especialidade").addEventListener("change", function () {
+      // Evento de change no select de especialidade
+      document.getElementById("erroGraduacao").classList.add("hidden");
+      // Esconde mensagem de erro
+    });
+
+    // ========== PÁGINA 3: SELEÇÃO DE OMs ==========
+    // Seção da página 3
+    function gerarSelectsOMs() {
+      // Função para gerar os 33 selects de OMs
+      const optionsList = document.getElementById("optionsList");
+      // Obtém container da lista
+      optionsList.innerHTML = '';
+      // Limpa conteúdo anterior
+
+      // Carrega as OMs do localStorage
+      const opcoesOMs = carregarOMs();
+      // Obtém lista de OMs
+
+      for (let i = 0; i < 33; i++) {
+        // Loop para criar 33 selects
+        const div = document.createElement('div');
+        // Cria div container
+        div.className = 'option-item';
+        // Adiciona classe CSS
+
+        const label = document.createElement('label');
+        // Cria label
+        label.textContent = `Opção ${i + 1}`;
+        // Define texto do label
+
+        const select = document.createElement('select');
+        // Cria elemento select
+        select.innerHTML = '<option value="">--Escolha--</option>' +
+          // Opção padrão
+          opcoesOMs.map(o => `<option value="${o}">${o}</option>`).join('');
+        // Gera options para cada OM
+        select.dataset.index = i;
+        // Armazena índice no dataset
+        select.addEventListener('change', atualizarOpcoesOMs);
+        // Adiciona evento de change
+
+        // Restaura seleção anterior se existir
+        if (escolhasOMs[i]) {
+          // Se já existe escolha para este índice
+          select.value = escolhasOMs[i];
+          // Restaura valor
+        }
+
+        div.appendChild(label);
+        // Adiciona label à div
+        div.appendChild(select);
+        // Adiciona select à div
+        optionsList.appendChild(div);
+        // Adiciona div ao container principal
+      }
+
+      atualizarOpcoesOMs();
+      // Atualiza estado das opções
+    }
+
+    function atualizarOpcoesOMs() {
+      // Função para atualizar estado das opções de OM
+      const selects = document.getElementById("optionsList").querySelectorAll('select');
+      // Obtém todos os selects
+      escolhasOMs = Array.from(selects).map(s => s.value);
+      // Atualiza array global com valores atuais
+
+      // Desabilita opções já selecionadas em outros selects
+      selects.forEach(s => {
+        // Para cada select
+        Array.from(s.options).forEach(opt => {
+          // Para cada option dentro do select
+          if (opt.value !== "" && escolhasOMs.includes(opt.value) && s.value !== opt.value) {
+            // Se option está selecionada em outro select e não é a atual
+            opt.disabled = true;
+            // Desabilita a option
+          } else {
+            // Caso contrário
+            opt.disabled = false;
+            // Habilita a option
+          }
+        });
+      });
+
+      // Habilita/desabilita botão avançar
+      document.getElementById("avancarPagina3").disabled = escolhasOMs.includes('');
+      // Desabilita se há selects vazios
+    }
+
+    document.getElementById("avancarPagina3").addEventListener("click", () => {
+      // Evento de clique no botão avançar da página 3
+      document.getElementById("page3").classList.add("hidden");
+      // Esconde página 3
+      document.getElementById("page4").classList.remove("hidden");
+      // Mostra página 4
+      atualizarRevisao();
+      // Atualiza dados de revisão
+    });
+
+    document.getElementById("voltarPagina3").addEventListener("click", () => {
+      // Evento de clique no botão voltar da página 3
+      document.getElementById("page3").classList.add("hidden");
+      // Esconde página 3
+      document.getElementById("page2").classList.remove("hidden");
+      // Mostra página 2
+    });
+
+    // ========== PÁGINA 4: REVISÃO ==========
+    // Seção da página 4
+    function atualizarRevisao() {
+      // Função para atualizar dados na página de revisão
+      const emailDisplay = dadosFormulario.email || "Não informado";
+      // Define display do email (ou mensagem padrão)
+
+      // MOSTRA APENAS "Graduação e Especialidade" COMBINADO
+      document.getElementById("reviewDados").textContent =
+        // Atualiza conteúdo dos dados pessoais
+        `Nome completo: ${dadosFormulario.nomeCompleto}
+        NIP: ${dadosFormulario.nip}
+        Email: ${emailDisplay}
+        Número Interno: ${dadosFormulario.numeroInterno}
+        Graduação e Especialidade: ${dadosFormulario.graduacaoEspecialidade}`;
+
+      document.getElementById("reviewEscolhas").textContent =
+        // Atualiza conteúdo das escolhas de OMs
+        escolhasOMs.map((v, i) => `${i + 1}: ${v}`).join('\n');
+      // Formata cada escolha com número
+    }
+
+    document.getElementById("voltarPagina4").addEventListener("click", () => {
+      // Evento de clique no botão voltar da página 4
+      document.getElementById("page4").classList.add("hidden");
+      // Esconde página 4
+      document.getElementById("page3").classList.remove("hidden");
+      // Mostra página 3
+    });
+
+    document.getElementById("concluir").addEventListener("click", () => {
+      // Evento de clique no botão concluir
+      // Gera e atualiza o arquivo JSON único
+      atualizarArquivoJSON();
+      // Salva dados no JSON
+
+      // Avança para a página 5
+      document.getElementById("page4").classList.add("hidden");
+      // Esconde página 4
+      document.getElementById("page5").classList.remove("hidden");
+      // Mostra página 5
+
+      // Exibe os dados finais
+      exibirDadosFinais();
+      // Atualiza dados na página final
+
+      // Mostra toast de sucesso
+      showToast('Formulário concluído com sucesso!');
+      // Exibe notificação
+    });
+
+    // ========== PÁGINA 5: CONCLUSÃO ==========
+    // Seção da página 5
+    function exibirDadosFinais() {
+      // Função para exibir dados finais na página 5
+      const emailDisplay = dadosFormulario.email || "Não informado";
+      // Define display do email
+
+      // MOSTRA APENAS "Graduação e Especialidade" COMBINADO
+      document.getElementById("finalDados").textContent =
+        // Atualiza dados pessoais finais
+        `Nome completo: ${dadosFormulario.nomeCompleto}
+NIP: ${dadosFormulario.nip}
+Email: ${emailDisplay}
+Número Interno: ${dadosFormulario.numeroInterno}
+Graduação e Especialidade: ${dadosFormulario.graduacaoEspecialidade}`;
+
+      document.getElementById("finalEscolhas").textContent =
+        // Atualiza escolhas de OMs finais
+        escolhasOMs.map((v, i) => `${i + 1}: ${v}`).join('\n');
+      // Formata cada escolha
+    }
+
+    document.getElementById("inicio").addEventListener("click", () => {
+      // Evento de clique no botão início
+      // Limpa todos os dados e volta para a página 1
+      dadosFormulario = {};
+      // Limpa dados do formulário
+      escolhasOMs = Array(33).fill('');
+      // Reseta escolhas de OMs
+
+      // Limpa os campos do formulário
+      document.getElementById("codigoVerificacao").value = '';
+      // Limpa campo código
+      document.getElementById("nomeCompleto").value = '';
+      // Limpa campo nome
+      document.getElementById("nip").value = '';
+      // Limpa campo NIP
+      document.getElementById("emailAuth").value = '';
+      // Limpa campo email
+      document.getElementById("numeroInternoAuth").value = '';
+      // Limpa campo número interno
+      document.getElementById("graduacao").value = '';
+      // Limpa select graduação
+      document.getElementById("especialidade").value = '';
+      // Limpa select especialidade
+
+      // Esconde todas as mensagens de erro
+      document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+      // Esconde todas as mensagens de erro
+
+      // Volta para a página 1 (SEM TOAST)
+      document.getElementById("page5").classList.add("hidden");
+      // Esconde página 5
+      document.getElementById("page1").classList.remove("hidden");
+      // Mostra página 1
+    });
+
+    document.getElementById("imprimir").addEventListener("click", () => {
+      // Evento de clique no botão imprimir
+      window.print();
+      // Aciona função de impressão do navegador
+    });
+
+    // ========== FUNÇÕES AUXILIARES ==========
+    // Seção de funções auxiliares
+    function atualizarArquivoJSON() {
+      // Função para atualizar arquivo JSON com os dados
+      const novoRegistro = {
+        // Cria novo registro no formato compatível
+        // Formato compatível com o sistema da tabela
+        nome: dadosFormulario.nomeCompleto,
+        nip: dadosFormulario.nip,
+        email: dadosFormulario.email || '',
+        codigo: dadosFormulario.codigo,
+        numeroInterno: dadosFormulario.numeroInterno,
+        graduacao: dadosFormulario.graduacao,
+        especialidade: dadosFormulario.especialidade,
+        graduacaoEspecialidade: dadosFormulario.graduacaoEspecialidade,
+        escolhasOMs: escolhasOMs,
+        data: new Date().toLocaleString("pt-BR"),
+        ultimaAlteracao: new Date().toLocaleString("pt-BR")
+      };
+
+      // Tenta carregar registros existentes do localStorage
+      let registrosExistentes = [];
+      // Array para registros existentes
+      try {
+        // Bloco try para capturar erros
+        const registrosSalvos = localStorage.getItem(NOME_ARQUIVO_JSON);
+        // Obtém registros salvos
+        if (registrosSalvos) {
+          // Se encontrou registros
+          registrosExistentes = JSON.parse(registrosSalvos);
+          // Parseia os registros
+        }
+      } catch (error) {
+        // Captura erros
+        console.error('❌ Erro ao carregar registros existentes:', error);
+        // Log de erro
+      }
+
+      // Verifica se já existe um registro com o mesmo código
+      const indexExistente = registrosExistentes.findIndex(reg => reg.codigo === novoRegistro.codigo);
+      // Busca índice do registro existente
+
+      if (indexExistente !== -1) {
+        // Se encontrou registro existente
+        // Atualiza registro existente
+        registrosExistentes[indexExistente] = novoRegistro;
+        // Substitui registro antigo
+        console.log('✅ Registro atualizado:', novoRegistro.codigo);
+        // Log de atualização
+      } else {
+        // Se não encontrou registro existente
+        // Adiciona novo registro
+        registrosExistentes.push(novoRegistro);
+        // Adiciona novo registro
+        console.log('✅ Novo registro adicionado:', novoRegistro.codigo);
+        // Log de adição
+      }
+
+      // Salva no localStorage
+      try {
+        // Bloco try para salvar
+        localStorage.setItem(NOME_ARQUIVO_JSON, JSON.stringify(registrosExistentes));
+        // Salva no localStorage
+        console.log('✅ Arquivo JSON atualizado com', registrosExistentes.length, 'registros');
+        // Log de sucesso
+      } catch (error) {
+        // Captura erros
+        console.error('❌ Erro ao salvar registro:', error);
+        // Log de erro
+      }
+
+      // Gera o arquivo JSON para download (formato compatível com sistema da tabela)
+      const dadosParaDownload = {
+        // Cria objeto para download
+        dados: registrosExistentes
+      };
+
+      const blob = new Blob([JSON.stringify(dadosParaDownload, null, 2)], { type: "application/json" });
+      // Cria blob com dados JSON
+      const url = URL.createObjectURL(blob);
+      // Cria URL para o blob
+      const link = document.createElement('a');
+      // Cria elemento link
+      link.href = url;
+      // Define href do link
+      link.download = NOME_ARQUIVO_JSON;
+      // Define nome do arquivo
+      link.click();
+      // Simula clique no link para download
+      URL.revokeObjectURL(url);
+      // Libera URL do blob
+    }
+
+    function showToast(msg) {
+      // Função para mostrar notificação toast
+      const toast = document.getElementById("toast");
+      // Obtém elemento toast
+      toast.textContent = msg;
+      // Define mensagem
+      toast.classList.add("show");
+      // Adiciona classe para mostrar
+      setTimeout(() => toast.classList.remove("show"), 2500);
+      // Remove classe após 2.5 segundos
+    }
+
+    // Carrega a lista de códigos quando a página é aberta
+    carregarListaCodigos();
+    // Chama função ao carregar a página
+  </script>
+
+</body>
+
+</html>
+
+<!-- USUARIO - SISTEMA DE PREENCHIMENTO -->
