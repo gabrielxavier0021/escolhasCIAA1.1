@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lista Pessoal Autenticada - Gerador de Código</title>
+  <style>
+    body {
+      /* Estilo do corpo da página */
+      font-family: "Segoe UI", sans-serif;
+      background: #f3f3f3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      /* Estilo do título principal */
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      /* Estilo do formulário */
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      width: 320px;
+    }
+
+    input,
+    select {
+      /* Estilo comum para inputs e selects */
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      /* Estilo base para botões */
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    /* Efeito hover nos botões */
+    .export-btns {
+      /* Container dos botões de exportação */
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .export-btns button {
+      /* Botões de exportação específicos */
+      width: auto;
+      background: #28a745;
+      padding: 10px 15px;
+    }
+
+    .export-btns button:hover {
+      background: #1e7e34;
+    }
+
+    /* Efeito hover nos botões de exportação */
+    .config-btns {
+      /* Container dos botões de configuração */
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .config-btns button {
+      /* Botões de configuração específicos */
+      background: #6c757d;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .config-btns button:hover {
+      /* Efeito hover nos botões de configuração */
+      background: #545b62;
+    }
+
+    table {
+      /* Estilo da tabela */
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 1300px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      /* Estilo comum para células da tabela */
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    th {
+      /* Estilo específico para cabeçalhos */
+      background: #007bff;
+      color: white;
+      user-select: none;
+      position: relative;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 16px 12px;
+    }
+
+    tr {
+      /* Estilo das linhas da tabela */
+      transition: background-color 0.2s ease;
+    }
+
+    tr:hover {
+      /* Efeito hover nas linhas */
+      background: #f8fbff;
+    }
+
+    .sort-icon {
+      /* Ícone de ordenação */
+      margin-left: 6px;
+      font-size: 12px;
+    }
+
+    .codigo {
+      /* Estilo para células de código */
+      font-family: 'Courier New', monospace;
+      color: #444;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .numero-interno {
+      /* Estilo para células de número interno */
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      color: #2c5aa0;
+      background: #f0f7ff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #d0e3ff;
+    }
+
+    .editable {
+      /* Células editáveis */
+      position: relative;
+      cursor: pointer;
+    }
+
+    .editable::after {
+      /* Tooltip para células editáveis */
+      content: "Clique duplo para editar";
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      background: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 10;
+    }
+
+    .editable:hover::after {
+      /* Mostra tooltip no hover */
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .filtros {
+      /* Painel de filtros */
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 300px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 100;
+      opacity: 0.98;
+    }
+
+    .filtros-container {
+      /* Container dos filtros */
+      position: relative;
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .overlay {
+      /* Overlay para filtros */
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 50;
+    }
+
+    .sortable {
+      /* Cabeçalhos ordenáveis */
+      cursor: pointer;
+    }
+
+    .sortable:hover {
+      /* Efeito hover nos cabeçalhos ordenáveis */
+      background: #0069d9;
+    }
+
+    .form-buttons {
+      /* Botões do formulário */
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    /* Larguras otimizadas para caber na tela */
+    /* Definições de largura para cada coluna da tabela */
+    .col-nome {
+      width: 18%;
+      min-width: 140px;
+    }
+
+    .col-nip {
+      width: 10%;
+      min-width: 90px;
+    }
+
+    .col-email {
+      width: 18%;
+      min-width: 140px;
+    }
+
+    .col-codigo {
+      width: 12%;
+      min-width: 110px;
+    }
+
+    .col-numero-interno {
+      width: 14%;
+      min-width: 120px;
+    }
+
+    .col-data {
+      width: 12%;
+      min-width: 120px;
+    }
+
+    .col-alteracao {
+      width: 8%;
+      min-width: 90px;
+    }
+
+    .col-filtros {
+      width: 7%;
+      min-width: 70px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1300px) {
+
+      /* Media query para telas menores */
+      body {
+        padding: 15px;
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        padding: 12px 8px;
+      }
+
+      /* Ajustes de largura para responsividade */
+      .col-nome {
+        min-width: 120px;
+      }
+
+      .col-email {
+        min-width: 120px;
+      }
+
+      .col-codigo {
+        min-width: 90px;
+      }
+
+      .col-numero-interno {
+        min-width: 100px;
+      }
+
+      .col-data {
+        min-width: 100px;
+      }
+
+      .col-alteracao {
+        min-width: 100px;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      /* Media query para mobile */
+      .export-btns,
+      .config-btns {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .export-btns button,
+      .config-btns button {
+        width: 200px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 10px 6px;
+      }
+    }
+
+    .navegacao-sistemas {
+      /* Navegação entre sistemas */
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-sistema {
+      /* Botões do sistema */
+      padding: 15px 30px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-sistema:hover {
+      /* Efeito hover nos botões do sistema */
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .btn-sistema.ativo {
+      /* Botão do sistema ativo */
+      background: #2c3e50;
+    }
+
+    /* Modal para gerenciamento de OMs */
+    .modal {
+      /* Modal genérico */
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      /* Conteúdo do modal */
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .close {
+      /* Botão fechar do modal */
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      /* Efeito hover no botão fechar */
+      color: #000;
+    }
+
+    .oms-list {
+      /* Lista de OMs no modal */
+      margin: 20px 0;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .om-item {
+      /* Item individual da lista de OMs */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .om-item:last-child {
+      /* Remove borda do último item */
+      border-bottom: none;
+    }
+
+    .om-item span {
+      /* Texto do item de OM */
+      flex-grow: 1;
+    }
+
+    .btn-excluir {
+      /* Botão excluir OM */
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-excluir:hover {
+      /* Efeito hover no botão excluir */
+      background: #c82333;
+    }
+
+    .add-om-form {
+      /* Formulário para adicionar OM */
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .add-om-form input {
+      /* Input do formulário de adicionar OM */
+      flex-grow: 1;
+    }
+
+    .btn-adicionar {
+      /* Botão adicionar OM */
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-adicionar:hover {
+      /* Efeito hover no botão adicionar */
+      background: #218838;
+    }
+
+    .btn-gerenciar-oms {
+      /* Botão gerenciar OMs */
+      background: #17a2b8;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .btn-gerenciar-oms:hover {
+      /* Efeito hover no botão gerenciar OMs */
+      background: #138496;
+    }
+  </style>
+  <!-- Fim da seção de estilos -->
+</head>
+<!-- Fim do cabeçalho -->
+
+<body>
+  <!-- Início do corpo -->
+  <!--<div class="navegacao-sistemas">
+    <!- Navegação entre sistemas -->
+  <!--<button class="btn-sistema ativo">Sistema Gerador de Código</button>
+    <!-- Botão do sistema atual (ativo) -->
+  <!--<button class="btn-sistema" onclick="window.open('formulario_auth.html', '_blank')">Abrir Sistema de
+      Autenticação</button>
+    <!-- Botão para abrir sistema de autenticação em nova aba -->
+  <!--</div>-->
+
+  <h1>Lista Pessoal Autenticada - Gerador de Código</h1>
+  <!-- Título principal -->
+
+  <form id="formPessoa">
+    <!-- Formulário para cadastrar pessoas -->
+    <label>Nome completo:</label>
+    <!-- Label do campo nome -->
+    <input type="text" id="nome" required placeholder="Digite seu nome completo" />
+    <!-- Campo de entrada para nome (obrigatório) -->
+    <label>NIP (8 números):</label>
+    <!-- Label do campo NIP -->
+    <input type="text" id="nip" required maxlength="8" pattern="[0-9]{8}" placeholder="Ex: 12345678" />
+    <!-- Campo de entrada para NIP (8 números, obrigatório) -->
+    <label>Email (opcional):</label>
+    <!-- Label do campo email -->
+    <input type="email" id="email" placeholder="exemplo@email.com" />
+    <!-- Campo de entrada para email (opcional) -->
+    <div class="form-buttons">
+      <!-- Container dos botões do formulário -->
+      <button type="submit">Gerar Código</button>
+      <!-- Botão para submeter o formulário -->
+    </div>
+  </form>
+
+  <div class="config-btns">
+    <!-- Botões de configuração -->
+    <button id="gerenciarOMs" class="btn-gerenciar-oms">Gerenciar OMs</button>
+    <!-- Botão para gerenciar OMs -->
+  </div>
+
+  <div class="export-btns">
+    <!-- Botões de exportação -->
+    <button id="exportCSV">Exportar CSV</button>
+    <!-- Botão para exportar CSV -->
+    <button id="exportJSON">Exportar JSON</button>
+    <!-- Botão para exportar JSON -->
+  </div>
+
+  <div class="filtros-container">
+    <!-- Container dos filtros e tabela -->
+    <table id="tabela">
+      <!-- Tabela de dados -->
+      <thead>
+        <!-- Cabeçalho da tabela -->
+        <tr>
+          <!-- Linha do cabeçalho -->
+          <th class="sortable col-nome" data-col="nome">Nome <span class="sort-icon"></span></th>
+          <!-- Cabeçalho nome (ordenável) -->
+          <th class="sortable col-nip" data-col="nip">NIP <span class="sort-icon"></span></th>
+          <!-- Cabeçalho NIP (ordenável) -->
+          <th class="col-email">Email</th>
+          <!-- Cabeçalho email -->
+          <th class="col-codigo">Código</th>
+          <!-- Cabeçalho código -->
+          <th class="col-numero-interno">Número Interno</th>
+          <!-- Cabeçalho número interno -->
+          <th class="col-data">Data/Hora</th>
+          <!-- Cabeçalho data/hora -->
+          <th class="col-alteracao">Última Alteração</th>
+          <!-- Cabeçalho última alteração -->
+          <th class="col-filtros" style="text-align: center;">
+            <!-- Cabeçalho filtros -->
+            <button id="toggleFiltros"
+              style="background: #ff9800; padding: 8px 12px; font-size: 12px; margin: 0;">Filtros</button>
+            <!-- Botão para mostrar/ocultar filtros -->
+          </th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <!-- Corpo da tabela (preenchido dinamicamente) -->
+    </table>
+    <div class="filtros" id="filtros">
+      <!-- Painel de filtros -->
+      <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px;">Filtrar por:</h3>
+      <!-- Título dos filtros -->
+      <label style="font-size: 14px;">Nome:</label>
+      <!-- Label filtro nome -->
+      <input type="text" id="pesquisaNome" placeholder="Digite o nome" />
+      <!-- Input filtro nome -->
+      <label style="font-size: 14px;">NIP:</label>
+      <!-- Label filtro NIP -->
+      <input type="text" id="pesquisaNip" placeholder="Digite o NIP" />
+      <!-- Input filtro NIP -->
+      <label style="font-size: 14px;">Código:</label>
+      <!-- Label filtro código -->
+      <input type="text" id="pesquisaCodigo" placeholder="Digite o código" />
+      <!-- Input filtro código -->
+      <label style="font-size: 14px;">Número Interno:</label>
+      <!-- Label filtro número interno -->
+      <input type="text" id="pesquisaNumeroInterno" placeholder="Digite o número" />
+      <!-- Input filtro número interno -->
+      <button id="limparFiltros" style="margin-top: 15px; font-size: 14px;">Limpar filtros</button>
+      <!-- Botão para limpar filtros -->
+    </div>
+  </div>
+
+  <!-- Modal para gerenciamento de OMs -->
+  <div id="modalOMs" class="modal">
+    <!-- Modal de gerenciamento de OMs -->
+    <div class="modal-content">
+      <!-- Conteúdo do modal -->
+      <span class="close">&times;</span>
+      <!-- Botão fechar (X) -->
+      <h2>Gerenciar Organizações Militares (OMs)</h2>
+      <!-- Título do modal -->
+      <p>Adicione, edite ou exclua as OMs disponíveis para seleção no sistema de autenticação.</p>
+      <!-- Descrição do modal -->
+
+      <div class="add-om-form">
+        <!-- Formulário para adicionar OM -->
+        <input type="text" id="novaOM" placeholder="Digite o nome da nova OM" maxlength="50">
+        <!-- Input para nova OM -->
+        <button id="adicionarOM" class="btn-adicionar">Adicionar OM</button>
+        <!-- Botão adicionar OM -->
+      </div>
+
+      <div class="oms-list" id="listaOMs">
+        <!-- Lista de OMs existentes -->
+        <!-- Lista de OMs será gerada dinamicamente aqui -->
+      </div>
+
+      <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+        <!-- Container dos botões do modal -->
+        <button id="restaurarPadrao" style="background: #6c757d;">Restaurar Padrão</button>
+        <!-- Botão restaurar padrão -->
+        <button id="fecharModal" style="background: #007bff;">Fechar</button>
+        <!-- Botão fechar modal -->
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <!-- Overlay para fechar filtros ao clicar fora -->
+
+  <script>
+    // Início da seção JavaScript
+    // Dados do JSON externo (simulação)
+    let jsonExterno = {
+      // Objeto com dados externos de exemplo
+      "dados": [
+        // Array de dados externos
+        { "codigo": "a1b2c3d4e5", "numero_interno": "ACI2-205" },
+        { "codigo": "f6g7h8i9j0", "numero_interno": "ACI2-206" },
+        { "codigo": "k1l2m3n4o5", "numero_interno": "ACI2-207" },
+        { "codigo": "p6q7r8s9t0", "numero_interno": "ACI2-208" },
+        { "codigo": "u1v2w3x4y5", "numero_interno": "ACI2-209" }
+      ]
+    };
+
+    // Lista padrão de OMs ATUALIZADA
+    const OMS_PADRAO = [
+      // Array constante com lista padrão de OMs
+      "CADIM",
+      "COM 1 DN",
+      "COM 1 DN Espírito Santo",
+      "COM 1 DN fora de sede rj",
+      "COM 1 DN minas gerais",
+      "COM 2 DN",
+      "COM 3 DN",
+      "COM 4 DN",
+      "COM 5 DN",
+      "COM 6 DN",
+      "COM 7 DN",
+      "COM 8 DN",
+      "COM 9 DN",
+      "Comemch",
+      "comFFE",
+      "CPesFN",
+      "DAbM",
+      "DADM",
+      "DENSM",
+      "DEnsM/CN",
+      "DFM",
+      "DFM/SGM",
+      "DHN",
+      "DIM",
+      "DPC",
+      "DPM",
+      "DPM/ SP",
+      "DPM/DF",
+      "DPM/IEAPM",
+      "DSAM",
+      "DSM",
+      "DSM/SNNF",
+      "Itaguaí"
+    ];
+
+    // Carregar OMs do localStorage ou usar padrão
+    function carregarOMs() {
+      // Função para carregar lista de OMs
+      const omsSalvas = localStorage.getItem("listaOMs");
+      // Obtém OMs do localStorage
+      if (omsSalvas) {
+        // Se encontrou OMs salvas
+        return JSON.parse(omsSalvas);
+        // Retorna OMs parseadas
+      } else {
+        // Se não encontrou OMs salvas
+        // Salva a lista padrão no localStorage na primeira vez
+        salvarOMs(OMS_PADRAO);
+        // Salva lista padrão
+        return OMS_PADRAO;
+        // Retorna lista padrão
+      }
+    }
+
+    // Salvar OMs no localStorage
+    function salvarOMs(oms) {
+      // Função para salvar lista de OMs
+      localStorage.setItem("listaOMs", JSON.stringify(oms));
+      // Salva OMs no localStorage
+    }
+
+    // Atualizar OMs no sistema de autenticação
+    function atualizarOMsNoSistemaAutenticacao() {
+      // Função para atualizar OMs no outro sistema
+      const omsAtuais = carregarOMs();
+      // Carrega OMs atuais
+      // Esta função seria chamada quando o sistema de autenticação estiver aberto
+      console.log("OMs atualizadas:", omsAtuais);
+      // Log das OMs atualizadas
+    }
+
+    // Mostrar modal de gerenciamento de OMs
+    function mostrarModalOMs() {
+      // Função para mostrar modal de OMs
+      const modal = document.getElementById("modalOMs");
+      // Obtém elemento modal
+      modal.style.display = "block";
+      // Mostra modal
+      atualizarListaOMs();
+      // Atualiza lista de OMs no modal
+    }
+
+    // Fechar modal de OMs
+    function fecharModalOMs() {
+      // Função para fechar modal de OMs
+      const modal = document.getElementById("modalOMs");
+      // Obtém elemento modal
+      modal.style.display = "none";
+      // Esconde modal
+    }
+
+    // Atualizar a lista de OMs no modal
+    function atualizarListaOMs() {
+      // Função para atualizar lista de OMs no modal
+      const listaOMs = document.getElementById("listaOMs");
+      // Obtém container da lista
+      const oms = carregarOMs();
+      // Carrega OMs
+
+      listaOMs.innerHTML = '';
+      // Limpa lista
+
+      if (oms.length === 0) {
+        // Se não há OMs
+        listaOMs.innerHTML = '<p style="text-align: center; color: #6c757d;">Nenhuma OM cadastrada</p>';
+        // Mostra mensagem de lista vazia
+        return;
+      }
+
+      oms.forEach((om, index) => {
+        // Para cada OM
+        const div = document.createElement('div');
+        // Cria div do item
+        div.className = 'om-item';
+        // Adiciona classe
+        div.innerHTML = `
+    <!-- HTML do item de OM -->
+      <span>${om}</span>
+      <!-- Nome da OM -->
+      <button class="btn-excluir" data-index="${index}">Excluir</button>
+      <!-- Botão excluir -->
+    `;
+        listaOMs.appendChild(div);
+        // Adiciona item à lista
+      });
+
+      // Adicionar eventos aos botões de excluir
+      document.querySelectorAll('.btn-excluir').forEach(btn => {
+        // Para cada botão excluir
+        btn.addEventListener('click', function () {
+          // Adiciona evento de clique
+          const index = parseInt(this.getAttribute('data-index'));
+          // Obtém índice do atributo data
+          excluirOM(index);
+          // Chama função excluir
+        });
+      });
+    }
+
+    // Adicionar nova OM
+    function adicionarOM() {
+      // Função para adicionar nova OM
+      const input = document.getElementById('novaOM');
+      // Obtém input da nova OM
+      const nomeOM = input.value.trim();
+      // Obtém e limpa valor
+
+      if (!nomeOM) {
+        // Se nome está vazio
+        alert('Por favor, digite o nome da OM.');
+        // Alerta usuário
+        return;
+      }
+
+      if (nomeOM.length > 50) {
+        // Se nome é muito longo
+        alert('O nome da OM deve ter no máximo 50 caracteres.');
+        // Alerta usuário
+        return;
+      }
+
+      const oms = carregarOMs();
+      // Carrega OMs atuais
+
+      // Verificar se já existe
+      if (oms.includes(nomeOM)) {
+        // Se OM já existe
+        alert('Esta OM já está cadastrada.');
+        // Alerta usuário
+        return;
+      }
+
+      oms.push(nomeOM);
+      // Adiciona nova OM
+      salvarOMs(oms);
+      // Salva lista atualizada
+      atualizarListaOMs();
+      // Atualiza lista no modal
+      input.value = '';
+      // Limpa input
+
+      alert('OM adicionada com sucesso!');
+      // Alerta sucesso
+    }
+
+    // Excluir OM
+    function excluirOM(index) {
+      // Função para excluir OM
+      if (!confirm('Tem certeza que deseja excluir esta OM?')) {
+        // Confirma exclusão
+        return;
+      }
+
+      const oms = carregarOMs();
+      // Carrega OMs
+      oms.splice(index, 1);
+      // Remove OM pelo índice
+      salvarOMs(oms);
+      // Salva lista atualizada
+      atualizarListaOMs();
+      // Atualiza lista no modal
+
+      alert('OM excluída com sucesso!');
+      // Alerta sucesso
+    }
+
+    // Restaurar lista padrão de OMs
+    function restaurarOMsPadrao() {
+      // Função para restaurar lista padrão
+      if (!confirm('Isso irá restaurar a lista padrão de OMs e remover todas as personalizações. Continuar?')) {
+        // Confirma restauração
+        return;
+      }
+
+      salvarOMs(OMS_PADRAO);
+      // Salva lista padrão
+      atualizarListaOMs();
+      // Atualiza lista no modal
+      alert('Lista de OMs restaurada para o padrão!');
+      // Alerta sucesso
+    }
+
+    async function gerarHash(texto) {
+      // Função assíncrona para gerar hash
+      const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
+      // Gera hash SHA-256
+      const hashArray = Array.from(new Uint8Array(buffer));
+      // Converte buffer para array
+      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 10);
+      // Converte para string hexadecimal e retorna primeiros 10 caracteres
+    }
+
+    const form = document.getElementById("formPessoa");
+    // Obtém elemento do formulário
+    const tabela = document.querySelector("#tabela tbody");
+    // Obtém corpo da tabela
+    let sortOrder = {};
+    // Objeto para armazenar ordem de classificação
+    let originalData = []; // Armazena os dados na ordem original
+
+    // Salvar novo registro
+    function salvarLocalmente(nome, nip, email, codigo, data, ultimaAlteracao, numeroInterno) {
+      // Função para salvar registro localmente
+      const lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém lista do localStorage ou array vazio
+      lista.push({ nome, nip, email, codigo, data, ultimaAlteracao, numeroInterno });
+      // Adiciona novo registro
+      localStorage.setItem("listaPessoal", JSON.stringify(lista));
+      // Salva lista atualizada
+    }
+
+    // Carregar lista
+    function carregarLista(lista = null) {
+      // Função para carregar lista na tabela
+      tabela.innerHTML = "";
+      // Limpa tabela
+      const dados = lista || JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém dados da lista ou do localStorage
+      originalData = [...dados]; // Mantém cópia dos dados originais
+      dados.forEach(({ nome, nip, email, codigo, data, ultimaAlteracao, numeroInterno }) => {
+        // Para cada registro
+        const linha = document.createElement("tr");
+        // Cria linha da tabela
+        linha.innerHTML = `
+    <!-- HTML da linha da tabela -->
+      <td class="editable nome">${nome}</td>
+      <!-- Célula nome (editável) -->
+      <td class="editable nip">${nip}</td>
+      <!-- Célula NIP (editável) -->
+      <td>${email || "-"}</td>
+      <!-- Célula email -->
+      <td class="codigo">${codigo}</td>
+      <!-- Célula código -->
+      <td class="numero-interno">${numeroInterno || "-"}</td>
+      <!-- Célula número interno -->
+      <td>${data}</td>
+      <!-- Célula data -->
+      <td class="ultimaAlteracao">${ultimaAlteracao || "-"}</td>
+      <!-- Célula última alteração -->
+      <td></td>
+      <!-- Célula vazia para alinhamento -->
+    `;
+        tabela.appendChild(linha);
+        // Adiciona linha à tabela
+      });
+    }
+
+    // Função para comparar códigos e atualizar números internos
+    function atualizarNumerosInternos() {
+      // Função para atualizar números internos
+      const lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém lista do localStorage
+      let atualizou = false;
+      // Flag de atualização
+
+      lista.forEach(pessoa => {
+        // Para cada pessoa na lista
+        const correspondencia = jsonExterno.dados.find(item => item.codigo === pessoa.codigo);
+        // Busca correspondência no JSON externo
+        if (correspondencia && (!pessoa.numeroInterno || pessoa.numeroInterno !== correspondencia.numero_interno)) {
+          // Se encontrou correspondência e número interno é diferente
+          pessoa.numeroInterno = correspondencia.numero_interno;
+          // Atualiza número interno
+          atualizou = true;
+          // Marca como atualizado
+        }
+      });
+
+      if (atualizou) {
+        // Se houve atualizações
+        localStorage.setItem("listaPessoal", JSON.stringify(lista));
+        // Salva lista atualizada
+        carregarLista();
+        // Recarrega tabela
+        alert("Números internos atualizados com sucesso!");
+        // Alerta sucesso
+      } else {
+        // Se não houve atualizações
+        alert("Nenhum número interno foi atualizado. Verifique se há correspondências nos códigos.");
+        // Alerta usuário
+      }
+    }
+
+    // Filtros
+    function aplicarFiltros() {
+      // Função para aplicar filtros
+      let lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém lista do localStorage
+      const nomeFiltro = document.getElementById("pesquisaNome").value.trim().toLowerCase();
+      // Obtém e formata filtro nome
+      const nipFiltro = document.getElementById("pesquisaNip").value.trim();
+      // Obtém filtro NIP
+      const codigoFiltro = document.getElementById("pesquisaCodigo").value.trim().toLowerCase();
+      // Obtém e formata filtro código
+      const numeroInternoFiltro = document.getElementById("pesquisaNumeroInterno").value.trim().toLowerCase();
+      // Obtém e formata filtro número interno
+
+      if (nomeFiltro) lista = lista.filter(p => p.nome.toLowerCase().includes(nomeFiltro));
+      // Filtra por nome se especificado
+      if (nipFiltro) lista = lista.filter(p => p.nip.includes(nipFiltro));
+      // Filtra por NIP se especificado
+      if (codigoFiltro) lista = lista.filter(p => p.codigo.toLowerCase().includes(codigoFiltro));
+      // Filtra por código se especificado
+      if (numeroInternoFiltro) lista = lista.filter(p => p.numeroInterno && p.numeroInterno.toLowerCase().includes(numeroInternoFiltro));
+      // Filtra por número interno se especificado
+
+      carregarLista(lista);
+      // Carrega lista filtrada
+    }
+
+    // Limpar filtros
+    document.getElementById("limparFiltros").addEventListener("click", () => {
+      // Evento de clique no botão limpar filtros
+      document.getElementById("pesquisaNome").value = "";
+      // Limpa filtro nome
+      document.getElementById("pesquisaNip").value = "";
+      // Limpa filtro NIP
+      document.getElementById("pesquisaCodigo").value = "";
+      // Limpa filtro código
+      document.getElementById("pesquisaNumeroInterno").value = "";
+      // Limpa filtro número interno
+      carregarLista();
+      // Recarrega lista sem filtros
+    });
+
+    // Mostrar/ocultar filtros
+    function mostrarFiltros() {
+      // Função para mostrar filtros
+      const filtros = document.getElementById("filtros");
+      // Obtém elemento filtros
+      const overlay = document.getElementById("overlay");
+      // Obtém elemento overlay
+      filtros.style.display = "block";
+      // Mostra filtros
+      overlay.style.display = "block";
+      // Mostra overlay
+    }
+
+    function ocultarFiltros() {
+      // Função para ocultar filtros
+      const filtros = document.getElementById("filtros");
+      // Obtém elemento filtros
+      const overlay = document.getElementById("overlay");
+      // Obtém elemento overlay
+      filtros.style.display = "none";
+      // Esconde filtros
+      overlay.style.display = "none";
+      // Esconde overlay
+    }
+
+    document.getElementById("toggleFiltros").addEventListener("click", (e) => {
+      // Evento de clique no botão toggle filtros
+      e.stopPropagation();
+      // Impede propagação do evento
+      const filtros = document.getElementById("filtros");
+      // Obtém elemento filtros
+      if (filtros.style.display === "block") {
+        // Se filtros estão visíveis
+        ocultarFiltros();
+        // Oculta filtros
+      } else {
+        // Se filtros estão ocultos
+        mostrarFiltros();
+        // Mostra filtros
+      }
+    });
+
+    // Fechar filtros ao clicar fora
+    document.getElementById("overlay").addEventListener("click", ocultarFiltros);
+    // Fecha filtros ao clicar no overlay
+    document.addEventListener("click", (e) => {
+      // Fecha filtros ao clicar fora
+      const filtros = document.getElementById("filtros");
+      // Obtém elemento filtros
+      const toggleBtn = document.getElementById("toggleFiltros");
+      // Obtém botão toggle
+
+      if (filtros.style.display === "block" &&
+        // Se filtros estão visíveis
+        !filtros.contains(e.target) &&
+        // E clique não foi dentro dos filtros
+        !toggleBtn.contains(e.target)) {
+        // E clique não foi no botão toggle
+        ocultarFiltros();
+        // Oculta filtros
+      }
+    });
+
+    // Aplicar filtros em tempo real
+    document.getElementById("pesquisaNome").addEventListener("input", aplicarFiltros);
+    // Aplica filtro nome em tempo real
+    document.getElementById("pesquisaNip").addEventListener("input", aplicarFiltros);
+    // Aplica filtro NIP em tempo real
+    document.getElementById("pesquisaCodigo").addEventListener("input", aplicarFiltros);
+    // Aplica filtro código em tempo real
+    document.getElementById("pesquisaNumeroInterno").addEventListener("input", aplicarFiltros);
+    // Aplica filtro número interno em tempo real
+
+    // Validar NIP - apenas números
+    document.getElementById("nip").addEventListener("input", function (e) {
+      // Validação do campo NIP em tempo real
+      this.value = this.value.replace(/[^0-9]/g, '');
+      // Remove caracteres não numéricos
+      if (this.value.length > 8) {
+        // Se tem mais de 8 caracteres
+        this.value = this.value.slice(0, 8);
+        // Corta para 8 caracteres
+      }
+    });
+
+    // Cadastro
+    form.addEventListener("submit", async e => {
+      // Evento de submit do formulário
+      e.preventDefault();
+      // Previne comportamento padrão
+      const nome = document.getElementById("nome").value.trim();
+      // Obtém nome
+      const nip = document.getElementById("nip").value.trim();
+      // Obtém NIP
+      const email = document.getElementById("email").value.trim();
+      // Obtém email
+      const data = new Date().toLocaleString("pt-BR");
+      // Obtém data atual
+
+      if (!/^[0-9]{8}$/.test(nip)) {
+        // Valida NIP (8 números)
+        alert("O NIP deve conter exatamente 8 números.");
+        // Alerta erro
+        return;
+      }
+
+      if (!nome) {
+        // Valida nome
+        alert("Preencha o nome.");
+        // Alerta erro
+        return;
+      }
+
+      const lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém lista atual
+      if (lista.some(p => p.nip === nip)) {
+        // Verifica se NIP já existe
+        alert("Este NIP já foi cadastrado.");
+        // Alerta erro
+        return;
+      }
+
+      const codigo = await gerarHash(nome + nip + email + Date.now());
+      // Gera código único
+      salvarLocalmente(nome, nip, email, codigo, data, null, null);
+      // Salva registro
+      carregarLista();
+      // Recarrega tabela
+      form.reset();
+      // Limpa formulário
+    });
+
+    // Edição
+    tabela.addEventListener("dblclick", e => {
+      // Evento de duplo clique para edição
+      const alvo = e.target;
+      // Obtém elemento clicado
+      if (alvo.classList.contains("editable")) {
+        // Se elemento é editável
+        const valorAntigo = alvo.textContent;
+        // Obtém valor atual
+        let novoValor = prompt("Alterar valor:", valorAntigo);
+        // Pede novo valor
+
+        if (novoValor !== null) {
+          // Se usuário não cancelou
+          // Para NIP, remove caracteres não numéricos
+          if (alvo.classList.contains("nip")) {
+            // Se é campo NIP
+            novoValor = novoValor.replace(/[^0-9]/g, '');
+            // Remove não numéricos
+            if (novoValor.length > 8) {
+              // Se tem mais de 8 caracteres
+              novoValor = novoValor.slice(0, 8);
+              // Corta para 8
+            }
+          }
+
+          const linha = alvo.parentElement;
+          // Obtém linha da tabela
+          const lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+          // Obtém lista
+          const index = Array.from(tabela.rows).indexOf(linha);
+          // Obtém índice da linha
+
+          if (alvo.classList.contains("nip")) {
+            // Validações específicas para NIP
+            if (!/^[0-9]{8}$/.test(novoValor)) {
+              // Valida formato NIP
+              alert("O NIP deve conter exatamente 8 números.");
+              return;
+            }
+            if (lista.some((p, i) => p.nip === novoValor && i !== index)) {
+              // Verifica duplicidade
+              alert("Este NIP já está cadastrado.");
+              return;
+            }
+          }
+
+          alvo.textContent = novoValor;
+          // Atualiza valor na tabela
+          const registro = lista[index];
+          // Obtém registro
+          if (alvo.classList.contains("nome")) registro.nome = novoValor;
+          // Atualiza nome
+          if (alvo.classList.contains("nip")) registro.nip = novoValor;
+          // Atualiza NIP
+          registro.ultimaAlteracao = new Date().toLocaleString("pt-BR");
+          // Atualiza data de alteração
+          linha.querySelector(".ultimaAlteracao").textContent = registro.ultimaAlteracao;
+          // Atualiza na tabela
+          localStorage.setItem("listaPessoal", JSON.stringify(lista));
+          // Salva lista
+          aplicarFiltros();
+          // Reaplica filtros
+        }
+      }
+    });
+
+    // Ordenação com três estados: original, ascendente, descendente
+    document.querySelectorAll("#tabela th.sortable").forEach(th => {
+      // Adiciona eventos de ordenação aos cabeçalhos
+      th.addEventListener("click", () => {
+        // Evento de clique no cabeçalho
+        const col = th.getAttribute("data-col");
+        // Obtém coluna para ordenar
+
+        let lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+        // Obtém lista
+        const current = sortOrder[col] || "original";
+        // Obtém estado atual de ordenação
+
+        // Ciclo: original -> asc -> desc -> original
+        let next;
+        // Próximo estado
+        switch (current) {
+          case "original": next = "asc"; break;
+          case "asc": next = "desc"; break;
+          case "desc": next = "original"; break;
+        }
+        sortOrder[col] = next;
+        // Atualiza estado
+
+        // Atualiza ícones
+        document.querySelectorAll("#tabela th .sort-icon").forEach(span => span.textContent = "");
+        // Limpa todos os ícones
+        const icone = th.querySelector(".sort-icon");
+        // Obtém ícone deste cabeçalho
+
+        if (next === "original") {
+          // Se voltando à ordem original
+          icone.textContent = "";
+          // Remove ícone
+          // Restaura ordem original (por data de criação)
+          lista.sort((a, b) => new Date(a.data) - new Date(b.data));
+          // Ordena por data
+        } else {
+          // Se ordenando
+          icone.textContent = next === "asc" ? "▲" : "▼";
+          // Define ícone
+
+          // Ordena a lista
+          lista.sort((a, b) => {
+            // Função de comparação
+            let va = a[col] || "";
+            let vb = b[col] || "";
+
+            if (col === "nip") {
+              // Ordenação numérica para NIP
+              return next === "asc" ? Number(va) - Number(vb) : Number(vb) - Number(va);
+            } else {
+              // Ordenação alfabética para Nome
+              return next === "asc" ? va.toString().localeCompare(vb.toString()) : vb.toString().localeCompare(va.toString());
+            }
+          });
+        }
+
+        carregarLista(lista);
+        // Recarrega tabela ordenada
+      });
+    });
+
+    // Função de exportação CSV
+    document.getElementById("exportCSV").addEventListener("click", function () {
+      // Evento de exportação CSV
+      const lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém lista
+
+      if (lista.length === 0) {
+        // Se lista está vazia
+        alert("Não há dados para exportar.");
+        // Alerta usuário
+        return;
+      }
+
+      // Cabeçalhos
+      const headers = ["Nome", "NIP", "Email", "Código", "Número Interno", "Data/Hora", "Última Alteração"];
+      // Define cabeçalhos
+
+      // Linhas de dados
+      const csvRows = [headers.join(",")];
+      // Array de linhas CSV
+
+      lista.forEach(item => {
+        // Para cada item
+        const row = [
+          // Cria linha
+          `"${item.nome}"`,
+          item.nip,
+          `"${item.email || ''}"`,
+          item.codigo,
+          `"${item.numeroInterno || ''}"`,
+          `"${item.data}"`,
+          `"${item.ultimaAlteracao || ''}"`
+        ];
+        csvRows.push(row.join(","));
+        // Adiciona linha
+      });
+
+      const csvString = csvRows.join("\n");
+      // Junta todas as linhas
+      const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+      // Cria blob
+      const url = URL.createObjectURL(blob);
+      // Cria URL
+
+      const link = document.createElement("a");
+      // Cria link
+      link.setAttribute("href", url);
+      // Define href
+      link.setAttribute("download", "lista_pessoal.csv");
+      // Define nome do arquivo
+      link.style.visibility = "hidden";
+      // Esconde link
+
+      document.body.appendChild(link);
+      // Adiciona link ao body
+      link.click();
+      // Simula clique
+      document.body.removeChild(link);
+      // Remove link
+    });
+
+    // Função de exportação JSON
+    document.getElementById("exportJSON").addEventListener("click", function () {
+      // Evento de exportação JSON
+      const lista = JSON.parse(localStorage.getItem("listaPessoal") || "[]");
+      // Obtém lista
+
+      if (lista.length === 0) {
+        // Se lista está vazia
+        alert("Não há dados para exportar.");
+        // Alerta usuário
+        return;
+      }
+
+      const jsonString = JSON.stringify(lista, null, 2);
+      // Converte para JSON formatado
+      const blob = new Blob([jsonString], { type: "application/json;charset=utf-8;" });
+      // Cria blob
+      const url = URL.createObjectURL(blob);
+      // Cria URL
+
+      const link = document.createElement("a");
+      // Cria link
+      link.setAttribute("href", url);
+      // Define href
+      link.setAttribute("download", "lista_pessoal.json");
+      // Define nome do arquivo
+      link.style.visibility = "hidden";
+      // Esconde link
+
+      document.body.appendChild(link);
+      // Adiciona link ao body
+      link.click();
+      // Simula clique
+      document.body.removeChild(link);
+      // Remove link
+    });
+
+    // Botões de configuração
+    document.getElementById("gerenciarOMs").addEventListener("click", mostrarModalOMs);
+    // Evento gerenciar OMs
+
+    // Eventos do modal de OMs
+    document.getElementById("adicionarOM").addEventListener("click", adicionarOM);
+    // Evento adicionar OM
+    document.getElementById("restaurarPadrao").addEventListener("click", restaurarOMsPadrao);
+    // Evento restaurar padrão
+    document.getElementById("fecharModal").addEventListener("click", fecharModalOMs);
+    // Evento fechar modal
+
+    // Fechar modal ao clicar no X
+    document.querySelector(".close").addEventListener("click", fecharModalOMs);
+    // Evento fechar modal no X
+
+    // Fechar modal ao clicar fora dele
+    window.addEventListener("click", function (event) {
+      // Fecha modal ao clicar fora
+      const modal = document.getElementById("modalOMs");
+      // Obtém modal
+      if (event.target === modal) {
+        // Se clique foi no modal (fora do conteúdo)
+        fecharModalOMs();
+        // Fecha modal
+      }
+    });
+
+    // Adicionar OM com Enter
+    document.getElementById("novaOM").addEventListener("keypress", function (e) {
+      // Adiciona OM com tecla Enter
+      if (e.key === "Enter") {
+        // Se tecla Enter
+        adicionarOM();
+        // Chama função adicionar
+      }
+    });
+
+    carregarLista();
+    // Carrega lista ao inicializar
+  </script>
+</body>
+
+</html>
+<!-- ADM - SISTEMA GERADOR DE CODIGOS-->
