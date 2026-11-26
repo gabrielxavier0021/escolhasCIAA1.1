@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pinheiro Veículos</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" id="brand"></a>
+  <nav><a href="#estoque">Estoque</a><a href="#equipes">Nossas equipes</a><a href="#sobre">Sobre</a><a href="#contato">Contato</a><a href="/admin">Área restrita</a></nav>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <h1 id="heroName"></h1><p id="heroSlogan"></p>
+  <a class="btn light" href="#estoque">Ver veículos</a>
+</div></div>
+
+<section id="estoque"><div class="wrap">
+  <h2>Nosso estoque</h2>
+  <div class="filters">
+    <input id="fq" placeholder="Buscar marca, modelo...">
+    <select id="fb"><option value="">Todas as marcas</option></select>
+    <select id="fp"><option value="">Qualquer preço</option><option value="40000">até R$ 40 mil</option><option value="70000">até R$ 70 mil</option><option value="100000">até R$ 100 mil</option><option value="150000">até R$ 150 mil</option></select>
+    <select id="fs"><option value="new">Mais recentes</option><option value="pa">Menor preço</option><option value="pd">Maior preço</option><option value="km">Menor km</option></select>
+  </div>
+  <div class="grid" id="list"></div>
+  <p id="empty" class="meta" hidden>Nenhum veículo encontrado.</p>
+</div></section>
+
+<section id="equipes" style="background:#fff"><div class="wrap">
+  <h2>Nossas equipes</h2>
+  <p class="meta" style="margin-top:-10px">Cada equipe tem um responsável e prepara a própria proposta para você.</p>
+  <div class="teams" id="teams"></div>
+</div></section>
+
+<section id="sobre"><div class="wrap"><h2>Sobre a loja</h2><p id="about" style="max-width:760px;white-space:pre-line"></p></div></section>
+
+<footer id="contato"><div class="wrap" id="contact"></div></footer>
+<a class="wa" id="wa" hidden target="_blank" rel="noopener">WhatsApp</a>
+
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+<script src="/app.js"></script>
+</body>
+</html>
